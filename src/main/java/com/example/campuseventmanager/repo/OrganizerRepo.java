@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrganizerRepo extends JpaRepository<Organizer, Long> {
+    Organizer findByName(String username);
 }

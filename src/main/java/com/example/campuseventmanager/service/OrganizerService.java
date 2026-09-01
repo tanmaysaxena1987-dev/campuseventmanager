@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class OrganizerService {
@@ -21,6 +23,12 @@ public class OrganizerService {
         organizerRepo.save(organizer);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
+                .body(mapOrganizertoOrganizerRegisterResponseDto(organizer));
+    }
+    public ResponseEntity<OrganizerRegisterResponseDto> getOrganizerById(Long id) {
+        Organizer organizer=organizerRepo.getById(id);
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
                 .body(mapOrganizertoOrganizerRegisterResponseDto(organizer));
     }
     public Organizer mapOrganizerRegisterRequestDtotoOrganizer(OrganizerRegisterRequestDto organizerRegisterRequestDto) {
