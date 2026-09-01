@@ -1,4 +1,4 @@
-package com.example.campuseventmanager.dto;
+package com.example.campuseventmanager.dto.organizerdto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

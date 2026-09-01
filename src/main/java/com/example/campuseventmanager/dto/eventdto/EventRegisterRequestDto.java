@@ -1,20 +1,17 @@
-package com.example.campuseventmanager.model;
+package com.example.campuseventmanager.dto.eventdto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "event")
-public class Event {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class EventRegisterRequestDto {
     @Getter
     @Setter
-    private Long id;
+    @NotNull
+    private Long organizerId;
     @Getter
     @Setter
     @NotBlank
@@ -32,10 +29,6 @@ public class Event {
     private LocalDateTime eventDate;
     @Getter
     @Setter
+    @NotNull
     private int capacity;
-    @ManyToOne
-    @JoinColumn(name ="organizer_id")
-    @Getter
-    @Setter
-    private Organizer organizer;
 }

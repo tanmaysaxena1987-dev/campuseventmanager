@@ -1,7 +1,9 @@
 package com.example.campuseventmanager.controller;
 
-import com.example.campuseventmanager.dto.OrganizerRegisterRequestDto;
-import com.example.campuseventmanager.dto.OrganizerRegisterResponseDto;
+import com.example.campuseventmanager.dto.eventdto.EventRegisterRequestDto;
+import com.example.campuseventmanager.dto.eventdto.EventRegisterResponseDto;
+import com.example.campuseventmanager.dto.organizerdto.OrganizerRegisterRequestDto;
+import com.example.campuseventmanager.dto.organizerdto.OrganizerRegisterResponseDto;
 import com.example.campuseventmanager.service.OrganizerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,4 +23,9 @@ public class OrganizerController {
     public ResponseEntity<OrganizerRegisterResponseDto> getOrganizerById(@PathVariable Long id) {
         return organizerService.getOrganizerById(id);
     }
+    @PostMapping("/registerevent")
+    public ResponseEntity<EventRegisterResponseDto> registerEvent(@Valid @RequestBody EventRegisterRequestDto eventRegisterRequestDto) {
+        return organizerService.registerEvent(eventRegisterRequestDto);
+    }
+    public ResponseEntity<>
 }

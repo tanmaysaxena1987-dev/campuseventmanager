@@ -1,4 +1,4 @@
-package com.example.campuseventmanager.dto;
+package com.example.campuseventmanager.dto.organizerdto;
 
 import com.example.campuseventmanager.enums.Roles;
 import jakarta.persistence.EnumType;
