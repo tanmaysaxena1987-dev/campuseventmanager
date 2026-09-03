@@ -4,6 +4,8 @@ import com.example.campuseventmanager.dto.eventdto.EventRegisterRequestDto;
 import com.example.campuseventmanager.dto.eventdto.EventRegisterResponseDto;
 import com.example.campuseventmanager.dto.organizerdto.OrganizerRegisterRequestDto;
 import com.example.campuseventmanager.dto.organizerdto.OrganizerRegisterResponseDto;
+import com.example.campuseventmanager.dto.organizerdto.OrganizerUpdateRequestDto;
+import com.example.campuseventmanager.dto.organizerdto.OrganizerUpdateResponseDto;
 import com.example.campuseventmanager.service.OrganizerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +29,8 @@ public class OrganizerController {
     public ResponseEntity<EventRegisterResponseDto> registerEvent(@Valid @RequestBody EventRegisterRequestDto eventRegisterRequestDto) {
         return organizerService.registerEvent(eventRegisterRequestDto);
     }
-    public ResponseEntity<>
+    @PutMapping("/update/{id}")
+    public ResponseEntity<OrganizerUpdateResponseDto> updateOrganizer(@PathVariable Long id,@Valid @RequestBody OrganizerUpdateRequestDto organizerUpdateRequestDto) {
+        return organizerService.updateOrganizer(id,organizerUpdateRequestDto);
+    }
 }

@@ -4,6 +4,9 @@ import com.example.campuseventmanager.dto.eventdto.EventRegisterRequestDto;
 import com.example.campuseventmanager.dto.eventdto.EventRegisterResponseDto;
 import com.example.campuseventmanager.dto.organizerdto.OrganizerRegisterRequestDto;
 import com.example.campuseventmanager.dto.organizerdto.OrganizerRegisterResponseDto;
+import com.example.campuseventmanager.dto.organizerdto.OrganizerUpdateRequestDto;
+import com.example.campuseventmanager.dto.organizerdto.OrganizerUpdateResponseDto;
+import com.example.campuseventmanager.exception.OrganizerNotFound;
 import com.example.campuseventmanager.model.Event;
 import com.example.campuseventmanager.model.Organizer;
 import com.example.campuseventmanager.repo.EventRepo;
@@ -14,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class OrganizerService {
@@ -41,6 +46,30 @@ public class OrganizerService {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(mapEventtoOrganizerEventRegisterResponseDto(event));
+    }
+    public ResponseEntity<OrganizerUpdateResponseDto> updateOrganizer(Long id,OrganizerUpdateRequestDto organizerUpdateRequestDto) {
+        Organizer organizer=organizerRepo.findById(id).orElseThrow(()->new OrganizerNotFound("organizer with ID "+id+" not found"));
+        Organizer updated_organizer=mapOrganizerUpdateRequestDtotoOrganizer(organizer,organizerUpdateRequestDto);
+        organizerRepo.save(updated_organizer);
+        OrganizerUpdateResponseDto organizerUpdateResponseDto=mapOrganizertoOrganizerUpdateResponseDto(updated_organizer);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(organizerUpdateResponseDto);
+    }
+    public OrganizerUpdateResponseDto mapOrganizertoOrganizerUpdateResponseDto(Organizer organizer) {
+        OrganizerUpdateResponseDto  organizerUpdateResponseDto=new OrganizerUpdateResponseDto();
+        organizerUpdateResponseDto.setId(organizer.getId());
+        organizerUpdateResponseDto.setName(organizer.getName());
+        organizerUpdateResponseDto.setEmail(organizer.getEmail());
+        organizerUpdateResponseDto.setRole(organizer.getRole());
+        organizerUpdateResponseDto.setDepartment(organizer.getDepartment());
+        return organizerUpdateResponseDto;
+    }
+    public Organizer mapOrganizerUpdateRequestDtotoOrganizer(Organizer organizer,OrganizerUpdateRequestDto organizerUpdateRequestDto) {
+        organizer.setEmail(organizerUpdateRequestDto.getEmail());
+        organizer.setName(organizerUpdateRequestDto.getName());
+        organizer.setDepartment(organizerUpdateRequestDto.getDepartment());
+        return organizer;
     }
     public Event mapOrganizerEventRegisterRequestDtotoEvent(EventRegisterRequestDto eventRegisterRequestDto) {
         Event event = new Event();
