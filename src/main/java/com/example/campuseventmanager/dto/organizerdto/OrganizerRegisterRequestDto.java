@@ -1,10 +1,15 @@
 package com.example.campuseventmanager.dto.organizerdto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 public class OrganizerRegisterRequestDto {
+    @Getter
+    @Setter
+    @NotBlank
+    private String username;
     @NotBlank
     @Getter
     @Setter

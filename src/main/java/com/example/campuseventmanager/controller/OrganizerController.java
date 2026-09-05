@@ -2,6 +2,8 @@ package com.example.campuseventmanager.controller;
 
 import com.example.campuseventmanager.dto.eventdto.EventRegisterRequestDto;
 import com.example.campuseventmanager.dto.eventdto.EventRegisterResponseDto;
+import com.example.campuseventmanager.dto.eventdto.EventUpdateRequestDto;
+import com.example.campuseventmanager.dto.eventdto.EventUpdateResponseDto;
 import com.example.campuseventmanager.dto.organizerdto.OrganizerRegisterRequestDto;
 import com.example.campuseventmanager.dto.organizerdto.OrganizerRegisterResponseDto;
 import com.example.campuseventmanager.dto.organizerdto.OrganizerUpdateRequestDto;
@@ -32,5 +34,9 @@ public class OrganizerController {
     @PutMapping("/update/{id}")
     public ResponseEntity<OrganizerUpdateResponseDto> updateOrganizer(@PathVariable Long id,@Valid @RequestBody OrganizerUpdateRequestDto organizerUpdateRequestDto) {
         return organizerService.updateOrganizer(id,organizerUpdateRequestDto);
+    }
+    @PutMapping("/updateevent/{id}")
+    public ResponseEntity<EventUpdateResponseDto> updateEvent(@PathVariable Long id, @Valid @RequestBody EventUpdateRequestDto eventUpdateRequestDto) {
+        return organizerService.updateEvent(id,eventUpdateRequestDto);
     }
 }

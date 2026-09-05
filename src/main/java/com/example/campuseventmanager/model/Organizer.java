@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,6 +21,11 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name="organizer")
 public class Organizer {
+    @NotBlank
+    @Getter
+    @Setter
+    @Column(unique = true)
+    private String username;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter

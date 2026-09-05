@@ -9,6 +9,9 @@ import lombok.Setter;
 public class OrganizerUpdateResponseDto {
     @Getter
     @Setter
+    private String username;
+    @Getter
+    @Setter
     private Long id;
     @Getter
     @Setter
