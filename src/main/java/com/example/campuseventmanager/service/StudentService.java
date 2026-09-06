@@ -2,6 +2,7 @@ package com.example.campuseventmanager.service;
 
 import com.example.campuseventmanager.dto.studentdto.StudentRegisterRequestDto;
 import com.example.campuseventmanager.dto.studentdto.StudentRegisterResponseDto;
+import com.example.campuseventmanager.dto.studentdto.StudentUpdateRequestDto;
 import com.example.campuseventmanager.model.Student;
 import com.example.campuseventmanager.repo.StudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,22 @@ public class StudentService {
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .body(mapStudentRegisterResponseDtotoStudent(student));
+    }
+    public ResponseEntity<StudentRegisterResponseDto> updateStudent(StudentUpdateRequestDto studentUpdateRequestDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Student student= studentRepo.findByUsername(authentication.getName());
+        Student updated_student=mapStudenttoStudentUpdateRequestDto(student,studentUpdateRequestDto);
+        studentRepo.save(updated_student);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(mapStudentRegisterResponseDtotoStudent(updated_student));
+    }
+    private Student mapStudenttoStudentUpdateRequestDto(Student student,StudentUpdateRequestDto studentUpdateRequestDto) {
+      student.setName(studentUpdateRequestDto.getName());
+      student.setEmail(studentUpdateRequestDto.getEmail());
+      student.setDepartment(studentUpdateRequestDto.getDepartment());
+      student.setSemester(studentUpdateRequestDto.getSemester());
+      return student;
     }
     private StudentRegisterResponseDto mapStudentRegisterResponseDtotoStudent(Student student) {
         StudentRegisterResponseDto studentRegisterResponseDto = new StudentRegisterResponseDto();

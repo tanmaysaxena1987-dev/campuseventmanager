@@ -2,6 +2,7 @@ package com.example.campuseventmanager.controller;
 
 import com.example.campuseventmanager.dto.studentdto.StudentRegisterRequestDto;
 import com.example.campuseventmanager.dto.studentdto.StudentRegisterResponseDto;
+import com.example.campuseventmanager.dto.studentdto.StudentUpdateRequestDto;
 import com.example.campuseventmanager.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,4 +22,9 @@ public class StudentController {
     public ResponseEntity<StudentRegisterResponseDto> viewStudent() {
         return studentService.viewStudent();
     }
+    @PutMapping("/update")
+    public ResponseEntity<StudentRegisterResponseDto> updateStudent(@Valid @RequestBody StudentUpdateRequestDto studentUpdateRequestDto) {
+        return studentService.updateStudent(studentUpdateRequestDto);
+    }
+    public ResponseEntity<>
 }
