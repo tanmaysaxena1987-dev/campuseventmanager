@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "event")
@@ -38,4 +39,8 @@ public class Event {
     @Getter
     @Setter
     private Organizer organizer;
+    @ManyToMany(mappedBy = "events")
+    @Getter
+    @Setter
+    private List<Student> students;
 }

@@ -22,7 +22,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.
                 csrf(Customizer-> Customizer.disable())
-                .authorizeHttpRequests(request-> request.requestMatchers("/organizer/register").permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests(request-> request.requestMatchers("/organizer/register","/student/register").permitAll().requestMatchers("/organizer/**").hasRole("ORGANIZER").anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }

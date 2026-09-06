@@ -23,9 +23,9 @@ public class OrganizerController {
     public ResponseEntity<OrganizerRegisterResponseDto> registerOrganizer(@Valid @RequestBody OrganizerRegisterRequestDto organizerRegisterRequestDto) {
         return organizerService.registerOrganizer(organizerRegisterRequestDto);
     }
-    @GetMapping("/view/{id}")
-    public ResponseEntity<OrganizerRegisterResponseDto> getOrganizerById(@PathVariable Long id) {
-        return organizerService.getOrganizerById(id);
+    @GetMapping("/view")
+    public ResponseEntity<OrganizerRegisterResponseDto> getOrganizerById() {
+        return organizerService.getOrganizerById();
     }
     @PostMapping("/registerevent")
     public ResponseEntity<EventRegisterResponseDto> registerEvent(@Valid @RequestBody EventRegisterRequestDto eventRegisterRequestDto) {
@@ -37,6 +37,6 @@ public class OrganizerController {
     }
     @PutMapping("/updateevent/{id}")
     public ResponseEntity<EventUpdateResponseDto> updateEvent(@PathVariable Long id, @Valid @RequestBody EventUpdateRequestDto eventUpdateRequestDto) {
-        return organizerService.updateEvent(id,eventUpdateRequestDto);
+        return organizerService.updateEvent(id, eventUpdateRequestDto);
     }
 }

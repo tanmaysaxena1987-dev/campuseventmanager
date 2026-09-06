@@ -18,6 +18,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,11 +40,13 @@ public class OrganizerService {
                 .status(HttpStatus.CREATED)
                 .body(mapOrganizertoOrganizerRegisterResponseDto(organizer));
     }
-    public ResponseEntity<OrganizerRegisterResponseDto> getOrganizerById(Long id) {
-        Organizer organizer=organizerRepo.getById(id);
+    public ResponseEntity<OrganizerRegisterResponseDto> getOrganizerById() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Organizer CurrentOrganizer=organizerRepo.findByUsername(username);
         return ResponseEntity
                 .status(HttpStatus.FOUND)
-                .body(mapOrganizertoOrganizerRegisterResponseDto(organizer));
+                .body(mapOrganizertoOrganizerRegisterResponseDto(CurrentOrganizer));
     }
     public ResponseEntity<EventRegisterResponseDto> registerEvent(EventRegisterRequestDto eventRegisterRequestDto) {
         Event event=mapOrganizerEventRegisterRequestDtotoEvent(eventRegisterRequestDto);
@@ -128,7 +133,7 @@ public class OrganizerService {
     }
     public Organizer mapOrganizerRegisterRequestDtotoOrganizer(OrganizerRegisterRequestDto organizerRegisterRequestDto) {
         Organizer organizer=new Organizer();
-        organizer.setUsername(organizerRegisterRequestDto.getUsername());
+        organizer.setUsername("org_"+organizerRegisterRequestDto.getUsername());
         organizer.setName(organizerRegisterRequestDto.getName());
         organizer.setEmail(organizerRegisterRequestDto.getEmail());
         organizer.setPassword(encoder.encode(organizerRegisterRequestDto.getPassword()));
