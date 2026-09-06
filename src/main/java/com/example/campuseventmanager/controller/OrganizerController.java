@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/organizer")
 public class OrganizerController {
@@ -38,5 +40,9 @@ public class OrganizerController {
     @PutMapping("/updateevent/{id}")
     public ResponseEntity<EventUpdateResponseDto> updateEvent(@PathVariable Long id, @Valid @RequestBody EventUpdateRequestDto eventUpdateRequestDto) {
         return organizerService.updateEvent(id, eventUpdateRequestDto);
+    }
+    @GetMapping("/geteventregistration/{id}")
+    public ResponseEntity<List<Long>>getRegistrationsforeEvent(@PathVariable Long id){
+        return organizerService.getRegistrationsforEvent(id);
     }
 }

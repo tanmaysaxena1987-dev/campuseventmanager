@@ -15,7 +15,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -48,21 +50,34 @@ public class StudentService {
                 .status(HttpStatus.OK)
                 .body(mapStudentRegisterResponseDtotoStudent(updated_student));
     }
-    public ResponseEntity<RegisterForEventResponseDto>  registerForEvent(Long eventId) {
+    public ResponseEntity<RegisterForEventResponseDto> registerForEvent(Long eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Student student = studentRepo.findByUsername(authentication.getName());
-        Event event=eventRepo.findById(eventId).orElseThrow(()->new EventNotFound("Event with id "+eventId+" not found"));
-        if(event.getCapacity()>0)
+        Event event = eventRepo.findById(eventId)
+                .orElseThrow(() -> new EventNotFound("Event with id " + eventId + " not found"));
+
+        if (student.getEvents().contains(event)) {
+            throw new IllegalArgumentException("Student with id " + student.getId() + " is already registered");
+        }
+
+        if (event.getCapacity() <= 0) {
+            throw new EventCapacityReached("Capacity reached");
+        }
+
         student.getEvents().add(event);
-        else throw new EventCapacityReached("Capacity reached");
-        if(student.getEvents().contains(event))
-            throw new IllegalArgumentException("Student with id "+student.getId()+" is already registered");
-        event.setCapacity(event.getCapacity()-1);
+        event.setCapacity(event.getCapacity() - 1);
         studentRepo.save(student);
-        RegisterForEventResponseDto registerForEventResponseDto=new RegisterForEventResponseDto(event.getTitle(),event.getEventDate(),event.getLocation());
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(registerForEventResponseDto);
+
+        RegisterForEventResponseDto registerForEventResponseDto =
+                new RegisterForEventResponseDto(event.getTitle(), event.getEventDate(), event.getLocation());
+
+        return ResponseEntity.status(HttpStatus.OK).body(registerForEventResponseDto);
+    }
+    public ResponseEntity<List<Long>>  getEventRegistration(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Student student = studentRepo.findByUsername(authentication.getName());
+        List event_id=student.getEvents().stream().map(Event::getId).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(event_id);
     }
     private Student mapStudenttoStudentUpdateRequestDto(Student student,StudentUpdateRequestDto studentUpdateRequestDto) {
       student.setName(studentUpdateRequestDto.getName());

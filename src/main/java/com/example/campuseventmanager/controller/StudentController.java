@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/student")
 public class StudentController {
@@ -30,5 +32,9 @@ public class StudentController {
     @PutMapping("/registerforevent/{eventId}")
     public ResponseEntity<RegisterForEventResponseDto> registerForEvent(@PathVariable Long eventId) {
         return studentService.registerForEvent(eventId);
+    }
+    @GetMapping("/getevents")
+    public ResponseEntity<List<Long>> getEventRegistration(){
+        return studentService.getEventRegistration();
     }
 }

@@ -12,6 +12,7 @@ import com.example.campuseventmanager.exception.EventNotFound;
 import com.example.campuseventmanager.exception.OrganizerNotFound;
 import com.example.campuseventmanager.model.Event;
 import com.example.campuseventmanager.model.Organizer;
+import com.example.campuseventmanager.model.Student;
 import com.example.campuseventmanager.repo.EventRepo;
 import com.example.campuseventmanager.repo.OrganizerRepo;
 import jakarta.validation.Valid;
@@ -24,7 +25,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrganizerService {
@@ -73,6 +76,18 @@ public class OrganizerService {
                 .status(HttpStatus.OK)
                 .body(eventUpdateResponseDto);
 
+    }
+    public ResponseEntity<List<Long>>getRegistrationsforEvent(Long eventId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Organizer organizer=organizerRepo.findByUsername(authentication.getName());
+        Event event=eventRepo.findById(eventId).orElseThrow(()->new EventNotFound("event with ID "+eventId+" not found"));
+        if(organizer.getId()==event.getOrganizer().getId()){
+            List<Long> student_id=event.getStudents().stream().map(Student::getId).collect(Collectors.toList());
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(student_id);
+        }
+        else throw new AccessDeniedException("access denied");
     }
     public Event mapEventtoEventUpdateRequestDto(Event event, EventUpdateRequestDto eventUpdateRequestDto) {
         event.setOrganizer(organizerRepo.getById(eventUpdateRequestDto.getOrganizerId()));
