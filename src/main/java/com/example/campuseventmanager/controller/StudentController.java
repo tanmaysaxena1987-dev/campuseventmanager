@@ -1,5 +1,6 @@
 package com.example.campuseventmanager.controller;
 
+import com.example.campuseventmanager.dto.studentdto.RegisterForEventResponseDto;
 import com.example.campuseventmanager.dto.studentdto.StudentRegisterRequestDto;
 import com.example.campuseventmanager.dto.studentdto.StudentRegisterResponseDto;
 import com.example.campuseventmanager.dto.studentdto.StudentUpdateRequestDto;
@@ -26,5 +27,8 @@ public class StudentController {
     public ResponseEntity<StudentRegisterResponseDto> updateStudent(@Valid @RequestBody StudentUpdateRequestDto studentUpdateRequestDto) {
         return studentService.updateStudent(studentUpdateRequestDto);
     }
-    public ResponseEntity<>
+    @PutMapping("/registerforevent/{eventId}")
+    public ResponseEntity<RegisterForEventResponseDto> registerForEvent(@PathVariable Long eventId) {
+        return studentService.registerForEvent(eventId);
+    }
 }

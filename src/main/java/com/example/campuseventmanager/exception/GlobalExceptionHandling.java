@@ -11,4 +11,16 @@ public class GlobalExceptionHandling{
     public ResponseEntity<String> handleOrganizerNotFound(OrganizerNotFound ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+    @ExceptionHandler(EventNotFound.class)
+    public ResponseEntity<String> handleEventNotFound(EventNotFound ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+    @ExceptionHandler(EventCapacityReached.class)
+    public ResponseEntity<String> handleEventCapacityReached(EventCapacityReached ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 }
