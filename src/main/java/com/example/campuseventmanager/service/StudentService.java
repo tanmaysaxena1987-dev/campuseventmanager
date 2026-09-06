@@ -7,6 +7,8 @@ import com.example.campuseventmanager.repo.StudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +20,19 @@ public class StudentService {
     public ResponseEntity<StudentRegisterResponseDto> registerStudent(StudentRegisterRequestDto studentRegisterRequestDto) {
         Student student = mapStudenttoStudentRegisterRequestDto(studentRegisterRequestDto);
         studentRepo.save(student);
-        return mapStudentRegisterResponseDtotoStudent(student);
+        StudentRegisterResponseDto studentRegisterResponseDto = mapStudentRegisterResponseDtotoStudent(student);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(studentRegisterResponseDto);
     }
-    private ResponseEntity<StudentRegisterResponseDto> mapStudentRegisterResponseDtotoStudent(Student student) {
+    public ResponseEntity<StudentRegisterResponseDto> viewStudent(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Student student = studentRepo.findByUsername(authentication.getName());;
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .body(mapStudentRegisterResponseDtotoStudent(student));
+    }
+    private StudentRegisterResponseDto mapStudentRegisterResponseDtotoStudent(Student student) {
         StudentRegisterResponseDto studentRegisterResponseDto = new StudentRegisterResponseDto();
         studentRegisterResponseDto.setDepartment(student.getDepartment());
         studentRegisterResponseDto.setId(student.getId());
@@ -28,9 +40,7 @@ public class StudentService {
         studentRegisterResponseDto.setEmail(student.getEmail());
         studentRegisterResponseDto.setUsername(student.getUsername());
         studentRegisterResponseDto.setSemester(student.getSemester());
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(studentRegisterResponseDto);
+        return studentRegisterResponseDto;
     }
     private Student  mapStudenttoStudentRegisterRequestDto(StudentRegisterRequestDto studentRegisterRequestDto) {
         Student student = new Student();
