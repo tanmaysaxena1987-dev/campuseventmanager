@@ -58,8 +58,10 @@ public class OrganizerService {
                 .status(HttpStatus.CREATED)
                 .body(mapEventtoOrganizerEventRegisterResponseDto(event));
     }
-    public ResponseEntity<OrganizerUpdateResponseDto> updateOrganizer(Long id,OrganizerUpdateRequestDto organizerUpdateRequestDto) {
-        Organizer organizer=organizerRepo.findById(id).orElseThrow(()->new OrganizerNotFound("organizer with ID "+id+" not found"));
+    public ResponseEntity<OrganizerUpdateResponseDto> updateOrganizer(OrganizerUpdateRequestDto organizerUpdateRequestDto) {
+        Authentication authentication  = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Organizer organizer=organizerRepo.findByUsername(username);
         Organizer updated_organizer=mapOrganizerUpdateRequestDtotoOrganizer(organizer,organizerUpdateRequestDto);
         organizerRepo.save(updated_organizer);
         OrganizerUpdateResponseDto organizerUpdateResponseDto=mapOrganizertoOrganizerUpdateResponseDto(updated_organizer);
@@ -68,7 +70,11 @@ public class OrganizerService {
                 .body(organizerUpdateResponseDto);
     }
     public ResponseEntity<EventUpdateResponseDto> updateEvent(Long id, EventUpdateRequestDto eventUpdateRequestDto) {
+        Authentication authentication  = SecurityContextHolder.getContext().getAuthentication();
+        Organizer organizer=organizerRepo.findByUsername(authentication.getName());
         Event event=eventRepo.findById(id).orElseThrow(()->new EventNotFound("event with ID "+id+" not found"));
+        if(!event.getOrganizer().getId().equals(organizer.getId()))
+            throw new AccessDeniedException("Access denied");
         Event updated_event=mapEventtoEventUpdateRequestDto(event,eventUpdateRequestDto);
         eventRepo.save(updated_event);
         EventUpdateResponseDto eventUpdateResponseDto=mapEventtoEventUpdateResponseDto(updated_event);

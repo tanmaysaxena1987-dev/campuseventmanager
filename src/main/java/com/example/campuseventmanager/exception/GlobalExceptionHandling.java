@@ -28,8 +28,4 @@ public class GlobalExceptionHandling{
     public ResponseEntity<String> accessDenied(AccessDeniedException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
-    @ExceptionHandler(AdminNotFound.class)
-    public ResponseEntity<String> handleAdminNotFound(AdminNotFound ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
 }

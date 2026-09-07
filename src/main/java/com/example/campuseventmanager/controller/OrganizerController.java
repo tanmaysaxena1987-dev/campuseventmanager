@@ -33,9 +33,9 @@ public class OrganizerController {
     public ResponseEntity<EventRegisterResponseDto> registerEvent(@Valid @RequestBody EventRegisterRequestDto eventRegisterRequestDto) {
         return organizerService.registerEvent(eventRegisterRequestDto);
     }
-    @PutMapping("/update/{id}")
-    public ResponseEntity<OrganizerUpdateResponseDto> updateOrganizer(@PathVariable Long id,@Valid @RequestBody OrganizerUpdateRequestDto organizerUpdateRequestDto) {
-        return organizerService.updateOrganizer(id,organizerUpdateRequestDto);
+    @PutMapping("/update")
+    public ResponseEntity<OrganizerUpdateResponseDto> updateOrganizer(@Valid @RequestBody OrganizerUpdateRequestDto organizerUpdateRequestDto) {
+        return organizerService.updateOrganizer(organizerUpdateRequestDto);
     }
     @PutMapping("/updateevent/{id}")
     public ResponseEntity<EventUpdateResponseDto> updateEvent(@PathVariable Long id, @Valid @RequestBody EventUpdateRequestDto eventUpdateRequestDto) {
