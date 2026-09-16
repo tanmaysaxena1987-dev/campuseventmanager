@@ -96,7 +96,10 @@ public class OrganizerService {
         else throw new AccessDeniedException("access denied");
     }
     public Event mapEventtoEventUpdateRequestDto(Event event, EventUpdateRequestDto eventUpdateRequestDto) {
-        event.setOrganizer(organizerRepo.getById(eventUpdateRequestDto.getOrganizerId()));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Organizer organizer=organizerRepo.findByUsername(username);
+        event.setOrganizer(organizer);
         event.setEventDate(eventUpdateRequestDto.getEventDate());
         event.setLocation(eventUpdateRequestDto.getLocation());
         event.setDescription(eventUpdateRequestDto.getDescription());
@@ -134,7 +137,10 @@ public class OrganizerService {
     }
     public Event mapOrganizerEventRegisterRequestDtotoEvent(EventRegisterRequestDto eventRegisterRequestDto) {
         Event event = new Event();
-        event.setOrganizer(organizerRepo.getById(eventRegisterRequestDto.getOrganizerId()));
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        String username=authentication.getName();
+        Organizer organizer=organizerRepo.findByUsername(username);
+        event.setOrganizer(organizerRepo.getById(organizer.getId()));
         event.setEventDate(eventRegisterRequestDto.getEventDate());
         event.setCapacity(eventRegisterRequestDto.getCapacity());
         event.setTitle(eventRegisterRequestDto.getTitle());
@@ -150,6 +156,7 @@ public class OrganizerService {
         organizerEventRegisterResponseDto.setCapacity(event.getCapacity());
         organizerEventRegisterResponseDto.setEventDate(event.getEventDate());
         organizerEventRegisterResponseDto.setId(event.getId());
+        organizerEventRegisterResponseDto.setLocation(event.getLocation());
         return organizerEventRegisterResponseDto;
     }
     public Organizer mapOrganizerRegisterRequestDtotoOrganizer(OrganizerRegisterRequestDto organizerRegisterRequestDto) {

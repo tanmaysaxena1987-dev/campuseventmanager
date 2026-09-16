@@ -5,6 +5,8 @@ import com.example.campuseventmanager.dto.studentdto.StudentRegisterRequestDto;
 import com.example.campuseventmanager.dto.studentdto.StudentRegisterResponseDto;
 import com.example.campuseventmanager.dto.studentdto.StudentUpdateRequestDto;
 import com.example.campuseventmanager.service.StudentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/student")
+@Tag(name = "Student Api",description = "Student related api")
 public class StudentController {
     @Autowired
     private StudentService studentService;
@@ -22,6 +26,7 @@ public class StudentController {
         return studentService.registerStudent(studentRegisterRequestDto);
     }
     @GetMapping("/view")
+    @Operation(summary = "view a student")
     public ResponseEntity<StudentRegisterResponseDto> viewStudent() {
         return studentService.viewStudent();
     }

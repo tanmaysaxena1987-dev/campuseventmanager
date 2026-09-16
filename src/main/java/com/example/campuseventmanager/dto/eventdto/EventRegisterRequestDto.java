@@ -10,10 +10,6 @@ import java.time.LocalDateTime;
 public class EventRegisterRequestDto {
     @Getter
     @Setter
-    @NotNull
-    private Long organizerId;
-    @Getter
-    @Setter
     @NotBlank
     private String title;
     @Getter
