@@ -20,10 +20,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +37,10 @@ public class OrganizerService {
     private OrganizerRepo organizerRepo;
     @Autowired
     private EventRepo eventRepo;
+    @Autowired
+    private JwtService jwtService;
+    @Autowired
+    public AuthenticationManager authmanager;
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     public ResponseEntity<OrganizerRegisterResponseDto> registerOrganizer(@Valid OrganizerRegisterRequestDto organizerRegisterRequestDto) {
         Organizer organizer=mapOrganizerRegisterRequestDtotoOrganizer(organizerRegisterRequestDto);
@@ -43,13 +49,10 @@ public class OrganizerService {
                 .status(HttpStatus.CREATED)
                 .body(mapOrganizertoOrganizerRegisterResponseDto(organizer));
     }
-    public ResponseEntity<OrganizerRegisterResponseDto> getOrganizerById() {
+    public Organizer getOrganizer() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        Organizer CurrentOrganizer=organizerRepo.findByUsername(username);
-        return ResponseEntity
-                .status(HttpStatus.FOUND)
-                .body(mapOrganizertoOrganizerRegisterResponseDto(CurrentOrganizer));
+        return organizerRepo.findByUsername(username);
     }
     public ResponseEntity<EventRegisterResponseDto> registerEvent(EventRegisterRequestDto eventRegisterRequestDto) {
         Event event=mapOrganizerEventRegisterRequestDtotoEvent(eventRegisterRequestDto);
@@ -176,5 +179,10 @@ public class OrganizerService {
         organizerRegisterResponseDto.setDepartment(organizer.getDepartment());
         organizerRegisterResponseDto.setId(organizer.getId());
         return organizerRegisterResponseDto;
+    }
+    public String loginOrganizer() {
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        String username=authentication.getName();
+        return jwtService.generateToken(username);
     }
 }
